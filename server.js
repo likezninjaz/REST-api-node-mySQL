@@ -75,9 +75,11 @@ router.get('/profiles', function(req, res) {
 	};
   	connection.query(query, [town, schedule], function (err, result, fields) {
 		if (err) throw err;
+		result = result.map(function(row) {
+	    	return Object.assign({}, row, { name: row.first_name + " " + row.surname + " " + row.patronymic});
+	    });
 	    res.json(result);
-		console.log(query);
-	    console.log(result);
+		console.log(new Date(), query);
 	});
 });
 
@@ -95,10 +97,15 @@ router.get('/meetings/:user_id', function(req, res) {
 });
 
 router.get('/profiles/:profile_id', function(req, res) {
-	var sql = 'SELECT * FROM profiles WHERE id = ?';
+	var mainQuery = 'SELECT * FROM profiles WHERE id = ?';
+	var specsQuery = 'SELECT name FROM specializtions WHERE id in (SELECT specializtion_id FROM profile_specializtions WHERE profile_id = ?)';
 	var profile_id = [req.params.profile_id];
-	connection.query(sql, profile_id, function (err, result, fields) {
+	connection.query(mainQuery, profile_id, function (err, result, fields) {
 	    if (err) throw err;
 	    res.json(result);
+	});
+	connection.query(specsQuery, profile_id, function (err, result, fields) {
+	    if (err) throw err;
+	    console.log(JSON.stringify(result))
 	});
 });

@@ -92,6 +92,29 @@ INSERT INTO `meetings` VALUES (1,'2018-02-18 14:00:01','2018-02-18 16:00:01','С
 UNLOCK TABLES;
 
 --
+-- Table structure for table `profile_specializtions`
+--
+
+DROP TABLE IF EXISTS `profile_specializtions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `profile_specializtions` (
+  `profile_id` int(11) NOT NULL,
+  `specializtion_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `profile_specializtions`
+--
+
+LOCK TABLES `profile_specializtions` WRITE;
+/*!40000 ALTER TABLE `profile_specializtions` DISABLE KEYS */;
+INSERT INTO `profile_specializtions` VALUES (1,1),(1,2);
+/*!40000 ALTER TABLE `profile_specializtions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `profiles`
 --
 
@@ -128,7 +151,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,'Иван','Иванов','Иванович','2018-02-16','Оффер','89829968166','qwertty@qwe.ty','2 года','Ижевск','Junior','2018-02-16 12:00:00',200000,25,NULL,NULL,NULL,NULL,NULL),(2,'Смирнов','Семен','Семенович','2018-02-14','Непонятно','824968456454','dfdf@DFGDFG.DFG','4 ЛЕТ','Москва','Middle','2018-02-16 12:00:00',213213,12,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `profiles` VALUES (1,'Иван','Иванов','Иванович','2018-02-16','Оффер','89829968166','qwertty@qwe.ty','2 года','Ижевск','Junior','2018-02-16 12:00:00',200000,25,NULL,NULL,NULL,NULL,NULL),(2,'Семен','Семенов','Семенович','2018-02-14','Непонятно','824968456454','dfdf@DFGDFG.DFG','4 ЛЕТ','Москва','Middle','2018-02-16 12:00:00',213213,12,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-19 15:21:24
+-- Dump completed on 2018-02-19 19:51:20
