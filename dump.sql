@@ -130,7 +130,7 @@ CREATE TABLE `profiles` (
   `status` varchar(45) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `expreience` varchar(45) DEFAULT NULL,
+  `experience` varchar(45) DEFAULT NULL,
   `town` varchar(45) DEFAULT NULL,
   `grade` varchar(45) DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
@@ -259,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-19 19:51:20
+-- Dump completed on 2018-02-20  1:32:39
