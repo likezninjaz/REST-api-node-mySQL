@@ -16,6 +16,54 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `areas`
+--
+
+DROP TABLE IF EXISTS `areas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `areas` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `areas`
+--
+
+LOCK TABLES `areas` WRITE;
+/*!40000 ALTER TABLE `areas` DISABLE KEYS */;
+INSERT INTO `areas` VALUES (1,'Мобильная разработка'),(2,'Строительство'),(3,'Дизайн');
+/*!40000 ALTER TABLE `areas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `faculties`
+--
+
+DROP TABLE IF EXISTS `faculties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `faculties` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `university_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `faculties`
+--
+
+LOCK TABLES `faculties` WRITE;
+/*!40000 ALTER TABLE `faculties` DISABLE KEYS */;
+/*!40000 ALTER TABLE `faculties` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `meetings`
 --
 
@@ -28,8 +76,9 @@ CREATE TABLE `meetings` (
   `to` datetime DEFAULT NULL,
   `caption` varchar(45) DEFAULT NULL,
   `profile_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`meeting_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +87,7 @@ CREATE TABLE `meetings` (
 
 LOCK TABLES `meetings` WRITE;
 /*!40000 ALTER TABLE `meetings` DISABLE KEYS */;
+INSERT INTO `meetings` VALUES (1,'2018-02-18 14:00:01','2018-02-18 16:00:01','Собеседование',1,1),(2,'2018-02-17 10:00:01','2018-02-17 18:00:01','Встреча',2,1);
 /*!40000 ALTER TABLE `meetings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -49,7 +99,7 @@ DROP TABLE IF EXISTS `profiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profiles` (
-  `profile_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
   `surname` varchar(45) DEFAULT NULL,
   `patronymic` varchar(45) DEFAULT NULL,
@@ -63,8 +113,13 @@ CREATE TABLE `profiles` (
   `updated` datetime DEFAULT NULL,
   `salary` int(11) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
-  PRIMARY KEY (`profile_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `creator_id` int(11) DEFAULT NULL,
+  `origin` varchar(45) DEFAULT NULL,
+  `schedule` varchar(45) DEFAULT NULL,
+  `marital_status` varchar(45) DEFAULT NULL,
+  `has_childrens` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,8 +128,103 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,'Ivanov','Ivan','Ivanovich','2018-01-16',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `profiles` VALUES (1,'Иван','Иванов','Иванович','2018-02-16','Оффер','89829968166','qwertty@qwe.ty','2 года','Ижевск','Junior','2018-02-16 12:00:00',200000,25,NULL,NULL,NULL,NULL,NULL),(2,'Смирнов','Семен','Семенович','2018-02-14','Непонятно','824968456454','dfdf@DFGDFG.DFG','4 ЛЕТ','Москва','Middle','2018-02-16 12:00:00',213213,12,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social_media`
+--
+
+DROP TABLE IF EXISTS `social_media`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_media` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `social_media`
+--
+
+LOCK TABLES `social_media` WRITE;
+/*!40000 ALTER TABLE `social_media` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_media` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social_media_links`
+--
+
+DROP TABLE IF EXISTS `social_media_links`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_media_links` (
+  `id` int(11) NOT NULL,
+  `link` varchar(45) DEFAULT NULL,
+  `social_media_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `social_media_links`
+--
+
+LOCK TABLES `social_media_links` WRITE;
+/*!40000 ALTER TABLE `social_media_links` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_media_links` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `specializtions`
+--
+
+DROP TABLE IF EXISTS `specializtions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `specializtions` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `area_id` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `specializtions`
+--
+
+LOCK TABLES `specializtions` WRITE;
+/*!40000 ALTER TABLE `specializtions` DISABLE KEYS */;
+INSERT INTO `specializtions` VALUES (1,'Программист Android','1'),(2,'Монтажник окон','2'),(3,'Программист iOS','1'),(4,'Веб дизайнер','3');
+/*!40000 ALTER TABLE `specializtions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `universities`
+--
+
+DROP TABLE IF EXISTS `universities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `universities` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `universities`
+--
+
+LOCK TABLES `universities` WRITE;
+/*!40000 ALTER TABLE `universities` DISABLE KEYS */;
+/*!40000 ALTER TABLE `universities` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -86,4 +236,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-19  0:53:52
+-- Dump completed on 2018-02-19 15:21:24
