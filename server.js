@@ -76,7 +76,11 @@ router.get('/profiles', function(req, res) {
   	connection.query(query, [town, schedule], function (err, result, fields) {
 		if (err) throw err;
 		result = result.map(function(row) {
-	    	return Object.assign({}, row, { name: row.first_name + " " + row.surname + " " + row.patronymic});
+	    	return Object.assign({}, row, { 
+	    		name: row.first_name + " " + row.surname,
+	    		specialization: row.grade,
+	    		town: "(г. " + row.town + ")"
+	    	});
 	    });
 	    res.json(result);
 		console.log(new Date(), query);
