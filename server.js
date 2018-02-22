@@ -5,7 +5,8 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-var allowCrossDomain = require('./headers/cross-domain')
+var allowCrossDomain = require('./headers/cross-domain');
+var mergeJSON = require("merge-json") ;
 
 // Configure MySQL connection
 const connection = mysql.createConnection({
@@ -63,7 +64,7 @@ router.get('/profiles', function(req, res) {
   	var query = "SELECT * FROM profiles"; //TO DO: IMPROVE THIS LOGIC!
   	if (town || schedule || grade) {
   		query += " WHERE id >= 0"
-  	}
+  	};
   	if (town) {
   		query += " AND town = ?";
 	};
@@ -73,17 +74,17 @@ router.get('/profiles', function(req, res) {
 	if (grade) {
   		query += " AND grade = ?";
 	};
-  	connection.query(query, [town, schedule], function (err, result, fields) {
+  	connection.query(query, [town, schedule, grade], function (err, result, fields) {
 		if (err) throw err;
 		result = result.map(function(row) {
 	    	return Object.assign({}, row, { 
 	    		name: row.first_name + " " + row.surname,
-	    		specialization: row.grade,
-	    		town: "(г. " + row.town + ")"
+	    		specialization: row.grade
 	    	});
 	    });
 	    res.json(result);
 		console.log(new Date(), query);
+		//console.log(res);
 	});
 });
 
@@ -106,10 +107,13 @@ router.get('/profiles/:profile_id', function(req, res) {
 	var profile_id = [req.params.profile_id];
 	connection.query(mainQuery, profile_id, function (err, result, fields) {
 	    if (err) throw err;
-	    res.json(result);
+	    var obj1 = result[0];
+	    connection.query(specsQuery, profile_id, function (err, result, fields) {
+		    if (err) throw err;
+		    var obj2 = {specializtions: result};
+		    var a = Object.assign(obj1, obj2);
+		    res.json(a);
+		});
 	});
-	connection.query(specsQuery, profile_id, function (err, result, fields) {
-	    if (err) throw err;
-	    console.log(JSON.stringify(result))
-	});
+	
 });
