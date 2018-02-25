@@ -6,7 +6,6 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var allowCrossDomain = require('./headers/cross-domain');
-var mergeJSON = require("merge-json") ;
 
 // Configure MySQL connection
 const connection = mysql.createConnection({
@@ -14,7 +13,7 @@ const connection = mysql.createConnection({
 	user: 'root',
 	password: 'oromaka',
 	database: 'jobseekers'
- });
+});
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -27,7 +26,7 @@ var port = process.env.PORT || 8080;        // set our port
 
 //Establish MySQL connection
 connection.connect(function(err) {
-   if (err) 
+   if (err)
       throw err
    else {
        console.log('Connected to MySQL');
@@ -61,12 +60,12 @@ router.get('/profiles', function(req, res) {
 	var town = req.param('town'),
   	    schedule = req.param('employment'),
   	    grade = req.param('grade');
-  	var query = "SELECT * FROM profiles"; //TO DO: IMPROVE THIS LOGIC!
-  	if (town || schedule || grade) {
-  		query += " WHERE id >= 0"
-  	};
-  	if (town) {
-  		query += " AND town = ?";
+  var query = "SELECT * FROM profiles"; //TO DO: IMPROVE THIS LOGIC!
+  if (town || schedule || grade) {
+  	query += " WHERE id >= 0"
+  };
+  if (town) {
+  	query += " AND town = ?";
 	};
 	if (schedule) {
   		query += " AND schedule = ?";
@@ -74,10 +73,10 @@ router.get('/profiles', function(req, res) {
 	if (grade) {
   		query += " AND grade = ?";
 	};
-  	connection.query(query, [town, schedule, grade], function (err, result, fields) {
+  connection.query(query, [town, schedule, grade], function (err, result, fields) {
 		if (err) throw err;
 		result = result.map(function(row) {
-	    	return Object.assign({}, row, { 
+	    	return Object.assign({}, row, {
 	    		name: row.first_name + " " + row.surname,
 	    		specialization: row.grade
 	    	});
@@ -103,17 +102,38 @@ router.get('/meetings/:user_id', function(req, res) {
 
 router.get('/profiles/:profile_id', function(req, res) {
 	var mainQuery = 'SELECT * FROM profiles WHERE id = ?';
-	var specsQuery = 'SELECT name FROM specializtions WHERE id in (SELECT specializtion_id FROM profile_specializtions WHERE profile_id = ?)';
+	var specsQuery = 'SELECT name AS position FROM specializations WHERE id in (SELECT specialization_id FROM profile_specializations WHERE profile_id = ?)';
+	var jobHistoryQuery = 'SELECT * FROM jobs WHERE id = ?'
+	var skillsQuery = 'SELECT skill FROM skills WHERE id in (SELECT skill_id FROM profile_skills WHERE profile_id = ?)';
+	var hobbiesQuery = 'SELECT hobby FROM hobbies WHERE id in (SELECT hobby_id FROM profile_hobbies WHERE profile_id = ?)';
 	var profile_id = [req.params.profile_id];
 	connection.query(mainQuery, profile_id, function (err, result, fields) {
 	    if (err) throw err;
 	    var obj1 = result[0];
 	    connection.query(specsQuery, profile_id, function (err, result, fields) {
 		    if (err) throw err;
-		    var obj2 = {specializtions: result};
-		    var a = Object.assign(obj1, obj2);
-		    res.json(a);
+		    var obj2 = {specialization: result};
+		    connection.query(jobHistoryQuery, profile_id, function (err, result, fields) {
+			    if (err) throw err;
+			    result = result.map(function(row) {
+			    	return Object.assign({}, row, { from: row.start, to: row.end });
+			    });
+			    var obj3 = {jobHistory: result};
+			    connection.query(skillsQuery, profile_id, function (err, result, fields) {
+				    if (err) throw err;
+				    result = result.map(a => a.skill);
+				    var obj4 = {skills: result};
+				    connection.query(hobbiesQuery, profile_id, function (err, result, fields) {
+					    if (err) throw err;
+					    result = result.map(a => a.hobby);
+					    var obj5 = {hobby: result};
+					    var a = Object.assign(obj1, obj2, obj3, obj4, obj5);
+					    console.log(a);
+					    res.json(a);
+					});
+				});
+			});
 		});
 	});
-	
+
 });
